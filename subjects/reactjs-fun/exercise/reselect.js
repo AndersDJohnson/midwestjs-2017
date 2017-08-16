@@ -33,11 +33,10 @@ describe('reactjs-fun/reselect', () => {
     ]
   };
 
-  const widgetSelector = state => state.widgets; // TODO implement
-  const styleSelector = state => state.styles; // TODO implement
-  const brandSelector = state => state.brands; // TODO implement
+  const widgetSelector = state => state.widgets;
+  const styleSelector = state => state.styles;
+  const brandSelector = state => state.brands;
 
-  // TODO implement an efficient memoized selector using reselect
   const mergedWidgetSelector = createSelector(
     brandSelector,
     styleSelector,
