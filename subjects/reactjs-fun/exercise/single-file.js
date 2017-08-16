@@ -27,15 +27,23 @@ describe('reactjs-fun/single-file', () => {
     const now = new Date();
 
     // TODO define your catalog
-    function Catalog() {
+    function Catalog({ items, datetime }) {
       return (
         <div>
+          <div>{datetime.toString()}</div>
+          <table>
+            {items.map(item => (
+              <tr key={item.id}>
+                <td>{item.id}</td>
+                <td>{item.name}</td>
+              </tr>
+            ))}
+          </table>
         </div>
       );
     }
 
-    // TODO render Catalog to screen
-    ReactDOM.render(<div>replace with your Catalog</div>,
+    ReactDOM.render(<Catalog items={itemArr} datetime={now} />,
                     appContainerDiv);
     const rows = appContainerDiv.querySelectorAll('tr');
     expect(rows.length).toBe(itemArr.length);
@@ -58,16 +66,30 @@ describe('reactjs-fun/single-file', () => {
     function fetchDataAndRender() {
       // TODO call fetchData and render to screen
       // TODO return a promise resolving to data
+      return fetchData().then(data => {
+        state.items = data;
+        render();
+      });
     }
     function fetchData() {
       // TODO fetch /fake-api.json with axios or similar xhr mechanism
       // TODO return a promise resolving to array of items
+
+      return axios.get('/fake-api.json').then(res => res.data.items);
     }
 
     // TODO define your catalog
-    function Catalog() {
+    function Catalog({ items }) {
       return (
         <div>
+          <table>
+            {items.map(item => (
+              <tr key={item.id}>
+                <td>{item.id}</td>
+                <td>{item.name}</td>
+              </tr>
+            ))}
+          </table>
         </div>
       );
     }
@@ -75,7 +97,7 @@ describe('reactjs-fun/single-file', () => {
 
     // TODO render your Catalog to the screen
     function render() {
-      ReactDOM.render(<div>your Catalog here</div>,
+      ReactDOM.render(<Catalog items={state.items} />,
                       appContainerDiv);
     }
 
@@ -106,6 +128,7 @@ describe('reactjs-fun/single-file', () => {
 
     function fetchDataAndRender() {
       // TODO increment state renderCount on every call
+      state.renderCount += 1;
       return fetchData()
         .then(items => {
           state.items = items; // save it to our state
@@ -121,9 +144,20 @@ describe('reactjs-fun/single-file', () => {
 
     // TODO define your Catalog component
     // TODO display the render count in a span with id 'renderCount'
-    function Catalog() {
+    function Catalog({ items, datetime, renderCount, onRefresh }) {
       return (
         <div>
+          <button onClick={onRefresh}>refresh</button>
+          <span id="renderCount">{renderCount}</span>
+          <div>{datetime.toString()}</div>
+          <table>
+            {items.map(item => (
+              <tr key={item.id}>
+                <td>{item.id}</td>
+                <td>{item.name}</td>
+              </tr>
+            ))}
+          </table>
         </div>
       );
     }
@@ -131,7 +165,12 @@ describe('reactjs-fun/single-file', () => {
     // TODO pass in onRefresh to Catalog along with other props
     function render() {
       const datetime = new Date();
-      ReactDOM.render(<div>your Catalog here</div>,
+      ReactDOM.render(<Catalog
+          items={state.items}
+          renderCount={state.renderCount}
+          datetime={datetime}
+          onRefresh={fetchDataAndRender}
+        />,
                       appContainerDiv
       );
     }
@@ -181,15 +220,33 @@ describe('reactjs-fun/single-file', () => {
 
     // TODO define your App component which uses the Catalog component
     // TODO it should wrap the Catalog with a div having id 'app'
-    function App() {
+    function App({ items, datetime, renderCount, onRefresh }) {
       return (
-        <div>use Catalog component in here</div>
+        <div id="app">
+          <Catalog
+            items={items}
+            renderCount={renderCount}
+            datetime={datetime}
+            onRefresh={fetchDataAndRender}
+          />
+        </div>
       );
     }
     // TODO define your Catalog component
-    function Catalog() {
+    function Catalog({ items, datetime, renderCount, onRefresh }) {
       return (
         <div>
+          <button onClick={onRefresh}>refresh</button>
+          <span id="renderCount">{renderCount}</span>
+          <div>{datetime.toString()}</div>
+          <table>
+            {items.map(item => (
+              <tr key={item.id}>
+                <td>{item.id}</td>
+                <td>{item.name}</td>
+              </tr>
+            ))}
+          </table>
         </div>
       );
     }
@@ -197,7 +254,12 @@ describe('reactjs-fun/single-file', () => {
     // TODO render App component
     function render() {
       const datetime = new Date();
-      ReactDOM.render(<div>your Catalog here</div>,
+      ReactDOM.render(<App
+          items={state.items}
+          renderCount={state.renderCount}
+          datetime={datetime}
+          onRefresh={fetchDataAndRender}
+        />,
                       appContainerDiv
       );
     }
