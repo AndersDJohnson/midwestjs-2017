@@ -33,12 +33,22 @@ describe('reactjs-fun/reselect', () => {
     ]
   };
 
-  const widgetSelector = state => undefined; // TODO implement
-  const styleSelector = state => undefined; // TODO implement
-  const brandSelector = state => undefined; // TODO implement
+  const widgetSelector = state => state.widgets; // TODO implement
+  const styleSelector = state => state.styles; // TODO implement
+  const brandSelector = state => state.brands; // TODO implement
 
   // TODO implement an efficient memoized selector using reselect
-  const mergedWidgetSelector = undefined; // TODO implement
+  const mergedWidgetSelector = createSelector(
+    brandSelector,
+    styleSelector,
+    widgetSelector,
+    (brands, styles, widgets) => widgets.map(widget => ({
+        name: widget.name,
+        widgetId: widget.widgetId,
+        brand: brands.find(brand => brand.brandId === widget.brandId),
+        style: styles.find(style => style.styleId === widget.styleId)
+      }))
+  );
 
 
   it('should have widget, style, and brand selectors', () => {
