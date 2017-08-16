@@ -3,6 +3,8 @@ import axios from 'axios';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
+import Catalog from './catalog';
+import Profile from './profile';
 
 const appContainerDiv = document.querySelector('#appContainer');
 
@@ -70,8 +72,17 @@ describe('reactjs-fun/split-file', () => {
   // TODO use Catalog component here
   // TODO use Profile component here
   function App() {
+    const datetime = new Date();
     return (
-      <div>use Catalog component here</div>
+      <div id="app">
+        <Catalog
+          items={state.items}
+          renderCount={state.renderCount}
+          datetime={datetime}
+          onRefresh={fetchDataAndRender}
+        />
+        <Profile {...state.profile} />
+      </div>
     );
   }
 
